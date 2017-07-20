@@ -2,6 +2,8 @@
 
 Check Bitcoin, Ethereum & Ripple prices anytime via your touchbar.
 
+[Download Page](https://github.com/andrewrd/coinwatch/releases)
+
 ## Prerequisites
 
 * [MacBook Pro](http://www.apple.com/macbook-pro/) laptop with touch bar
