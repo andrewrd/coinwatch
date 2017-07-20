@@ -1,0 +1,21 @@
+{
+  "name": "CoinWatch",
+  "version": "1.0.0",
+  "description": "Allows you to view cryptocurrency prices with your Macbook's touchbar.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/andrewrd/coinwatch/",
+  "author": "andrewrd",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "electron": "^1.6.6",
+    "electron-fetch": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^8.7.2"
+  }
+}
