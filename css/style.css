@@ -4,7 +4,6 @@ html {
 	justify-content: center;
   font-family: 'Montserrat', sans-serif;  
   cursor:pointer;
-  padding:10px;
   text-align: center;
   color:#373a36;
 }
@@ -16,6 +15,8 @@ html {
 .credit {
   padding-left: 10px;
   margin-top: 30px;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .welcome {
   background-color: white;
