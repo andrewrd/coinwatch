@@ -32,10 +32,10 @@ const updateReels = (input) => {
             bitcoinprice.label = 'Bitcoin $' + input[i].price_usd;
         } 
         if(input[i].id == 'ethereum'){  
-            ethereumprice.label = 'Ethereum  $' + input[1].price_usd;
+            ethereumprice.label = 'Ethereum  $' + input[i].price_usd;
         }
         if(input[i].id == 'ripple'){  
-            rippleprice.label = 'Ripple $' + input[2].price_usd;
+            rippleprice.label = 'Ripple $' + input[i].price_usd;
         }
     }
 };
