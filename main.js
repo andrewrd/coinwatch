@@ -25,24 +25,13 @@ function button(coinName, price) {
     });
 }
 
-function touchBar(response) {
-    var buttons = response.map((coin) => {
-        if (coin.id == 'bitcoin') {
-            console.log(coin.price_usd);
-            return button('bitcoin', coin.price_usd);
-        }
-
-        if (coin.id == 'ethereum') {
-            return button('ethereum', coin.price_usd);
-        }
-
-        if (coin.id == 'ripple') {
-            return button('ripple', coin.price_usd);
-        }
-    });
+function touchBar(response, ids) {
+    var buttons = response.filter(
+        (coin) => ids.includes(coin.id)).map(
+            (coin) => button(coin.id, coin.price_usd));
 
     return new TouchBar(
-        buttons.filter((b) => b !== undefined));
+        buttons.filter((b) => b !== null));
 }
 
 function createWindow() {
@@ -70,7 +59,7 @@ function createWindow() {
     var refresh = () => {
         fetch('https://api.coinmarketcap.com/v1/ticker/?limit=20')
         .then((res) => { return res.json(); }
-        ).then((json) => { win.setTouchBar(touchBar(json)); })
+        ).then((json) => { win.setTouchBar(touchBar(json, defaultConfig.coins)); })
     };
 
     refresh();
