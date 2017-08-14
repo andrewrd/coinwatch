@@ -13,7 +13,8 @@
   "dependencies": {
     "babel": "^6.23.0",
     "electron": "^1.6.6",
-    "electron-fetch": "^1.0.0"
+    "electron-fetch": "^1.0.0",
+    "expand-tilde": "^2.0.2"
   },
   "devDependencies": {
     "electron-packager": "^8.7.2"

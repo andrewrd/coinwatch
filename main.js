@@ -2,13 +2,14 @@ const electron = require('electron');
 
 const { app, BrowserWindow, TouchBar, session, ipcMain } = require('electron');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
+const expandTilde = require('expand-tilde');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const fetch = require('electron-fetch');
 
 const defaultConfig = {
-    refresh: 10000, // 10 seconds
+    refresh: 150000, // 2.5 minutes
     coins: [
         "bitcoin",
         "ethereum",
@@ -17,24 +18,31 @@ const defaultConfig = {
 };
 
 function button(coinName, price) {
+    var iconPath = path.join(__dirname, '/img/' + coinName + '.png');
+    if (!fs.existsSync(iconPath)) {
+        iconPath = path.join(__dirname, '/img/notfound.png');
+    }
+
     return new TouchBarButton({
         label: coinName + ' $' + price,
         textColor: '#ABCDEF',
-        icon: path.join(__dirname, '/img/' + coinName + '.png'),
+        icon: iconPath,
         iconPosition: 'left',
     });
 }
 
 function touchBar(response, ids) {
-    var buttons = response.filter(
-        (coin) => ids.includes(coin.id)).map(
+    var buttons =
+        response.filter(
+            (coin) => ids.includes(coin.id)
+        ).map(
             (coin) => button(coin.id, coin.price_usd));
 
     return new TouchBar(
         buttons.filter((b) => b !== null));
 }
 
-function createWindow() {
+function createWindow(config) {
     // Create the browser window.
     win = new BrowserWindow({ width: 500, height: 260, icon: path.join(__dirname, '/img/logo.png') });
 
@@ -59,17 +67,22 @@ function createWindow() {
     var refresh = () => {
         fetch('https://api.coinmarketcap.com/v1/ticker/?limit=20')
         .then((res) => { return res.json(); }
-        ).then((json) => { win.setTouchBar(touchBar(json, defaultConfig.coins)); })
+        ).then((json) => { win.setTouchBar(touchBar(json, config.coins)); })
     };
 
     refresh();
-    setInterval(refresh, defaultConfig.refresh);
+    setInterval(refresh, config.refresh);
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// Load user-defined configuration (use default otherwise)
+app.on('ready', () => {
+    var configPath = expandTilde('~/.coinwatch.json');
+    if (fs.existsSync(configPath)) {
+        createWindow(JSON.parse(fs.readFileSync(configPath)));
+    } else {
+        createWindow(defaultConfig);
+    }
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -79,15 +92,3 @@ app.on('window-all-closed', () => {
     //    app.quit();
     }
 });
-
-app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-
-    if (win === null) {
-        createWindow();
-    }
-});
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
