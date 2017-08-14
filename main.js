@@ -2,79 +2,48 @@ const electron = require('electron');
 
 const { app, BrowserWindow, TouchBar, session, ipcMain } = require('electron');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
-const fetch =require('electron-fetch');
+const fetch = require('electron-fetch');
 
-const bitcoinprice = new TouchBarButton({
-    label: 'Bitcoin Price: ',
-    textColor: '#ABCDEF',
-    icon: path.join(__dirname, '/img/bitcoin.png'),
-    iconPosition: 'left',
-});
-const ethereumprice = new TouchBarButton({
-    label: 'Bitcoin Price: ',
-    textColor: '#ABCDEF',
-    icon: path.join(__dirname, '/img/ethereum.png'),
-    iconPosition: 'left',
-});
-const rippleprice = new TouchBarButton({
-    label: 'Ripple Price: ',
-    textColor: '#ABCDEF',
-    icon: path.join(__dirname, '/img/ripple.png'),
-    iconPosition: 'left',
-});
-
-const updateReels = (input) => {
-    //This iterates through the API response and finds the correct price using the id.
-    for(let i=0; i<input.length; i++){
-        if(input[i].id == 'bitcoin'){
-            bitcoinprice.label = 'Bitcoin $' + input[i].price_usd;
-        } 
-        if(input[i].id == 'ethereum'){  
-            ethereumprice.label = 'Ethereum  $' + input[i].price_usd;
-        }
-        if(input[i].id == 'ripple'){  
-            rippleprice.label = 'Ripple $' + input[i].price_usd;
-        }
-    }
+const defaultConfig = {
+    refresh: 10000, // 10 seconds
+    coins: [
+        "bitcoin",
+        "ethereum",
+        "ripple"
+    ]
 };
 
-//Uses the electron-fetch to fetch api.
-const bitcoin = fetch('https://api.coinmarketcap.com/v1/ticker/?limit=20')
-    .then(
-        (res) => 
-        res.json()
-    ).then(
-        (json) => {
-            updateReels(json)
+function button(coinName, price) {
+    return new TouchBarButton({
+        label: coinName + ' $' + price,
+        textColor: '#ABCDEF',
+        icon: path.join(__dirname, '/img/' + coinName + '.png'),
+        iconPosition: 'left',
+    });
+}
+
+function touchBar(response) {
+    var buttons = response.map((coin) => {
+        if (coin.id == 'bitcoin') {
+            console.log(coin.price_usd);
+            return button('bitcoin', coin.price_usd);
         }
-    )
 
-//This repeats the api call every 2.5 minutes 
-setInterval(function() {
-    fetch('https://api.coinmarketcap.com/v1/ticker/?limit=20')
-    .then(
-        (res) => 
-        res.json()
-    ).then(
-        (json) => {
-            updateReels(json)
+        if (coin.id == 'ethereum') {
+            return button('ethereum', coin.price_usd);
         }
-    )
-}, 150000);
 
+        if (coin.id == 'ripple') {
+            return button('ripple', coin.price_usd);
+        }
+    });
 
-const touchBar = new TouchBar([
-    new TouchBarSpacer({size: 'small'}),
-    bitcoinprice,
-    new TouchBarSpacer({size: 'large'}),
-    ethereumprice,
-    new TouchBarSpacer({size: 'large'}),
-    rippleprice,
-]);
-
-
+    return new TouchBar(
+        buttons.filter((b) => b !== undefined));
+}
 
 function createWindow() {
     // Create the browser window.
@@ -98,7 +67,14 @@ function createWindow() {
         win = null;
     });
 
-    win.setTouchBar(touchBar);
+    var refresh = () => {
+        fetch('https://api.coinmarketcap.com/v1/ticker/?limit=20')
+        .then((res) => { return res.json(); }
+        ).then((json) => { win.setTouchBar(touchBar(json)); })
+    };
+
+    refresh();
+    setInterval(refresh, defaultConfig.refresh);
 }
 
 // This method will be called when Electron has finished
