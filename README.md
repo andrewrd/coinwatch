@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/coinwatch/Lobby](https://badges.gitter.im/coinwatch/Lobby.svg)](https://gitter.im/coinwatch/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Check Bitcoin, Ethereum & Ripple prices anytime via your touchbar.
+Check Bitcoin, Ethereum, Ripple & NEO prices anytime via your touchbar.
 
 [Download Page](https://github.com/andrewrd/coinwatch/releases)
 
@@ -13,7 +13,7 @@ Check Bitcoin, Ethereum & Ripple prices anytime via your touchbar.
 ## How to Install
 
     npm install
-    
+
 ## How to Run
 
     npm start
@@ -26,4 +26,5 @@ Ethereum - 0x007856928853Fb57f5d5dE3F695E003E11D7B716
 
 Ripple - rM4pGL1G7WBAUBLsB9SPUrjdPXpz8nT8be
 
-
+## Contributors
+Noam Eppel, CleanForest.co
