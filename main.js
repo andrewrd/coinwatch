@@ -13,6 +13,7 @@ const defaultConfig = {
     coins: [
         "bitcoin",
         "ethereum",
+        "neo",
         "ripple"
     ]
 };
@@ -24,10 +25,20 @@ function button(coinName, price) {
     }
 
     return new TouchBarButton({
-        label: coinName + ' $' + price,
+        //label: coinName + ' $' + price,
+        label: '$' + price,
         textColor: '#ABCDEF',
         icon: iconPath,
         iconPosition: 'left',
+        click: () => {
+          let win = new BrowserWindow({width: 900, height: 800})
+          win.on('closed', () => {
+            win = null
+          })
+
+          // Load a remote URL
+          win.loadURL('https://coinmarketcap.com/currencies/' + coinName)
+        }
     });
 }
 
