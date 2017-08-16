@@ -24,7 +24,8 @@ function button(coinName, price) {
     }
 
     return new TouchBarButton({
-        //label: coinName + ' $' + price,
+        // label: coinName + ' $' + price,
+        label: '$' + price,
         textColor: '#ABCDEF',
         icon: iconPath,
         iconPosition: 'left',
