@@ -10,6 +10,27 @@ Check Bitcoin, Ethereum, Ripple & other cryptocurrencies anytime via your touchb
 
 * [MacBook Pro](http://www.apple.com/macbook-pro/) laptop with touch bar
 
+## Custom Settings
+
+Users have the option to define a custom configuration for this app.
+
+Simply place a json file named `.coinwatch.json` in your home directory that has
+the following structure.
+
+```json
+{
+  "refresh": 150000,
+  "coins": [
+    "bitcoin",
+    "ethereum",
+    "ripple"
+  ]
+}
+```
+
+From here you can modify the refresh rate and the coins that are displayed in
+your touch bar.
+
 ## How to Install
 
     npm install
@@ -27,5 +48,5 @@ Ethereum - 0x007856928853Fb57f5d5dE3F695E003E11D7B716
 Ripple - rM4pGL1G7WBAUBLsB9SPUrjdPXpz8nT8be
 
 ## Contributors
-andrewrd, andrewrd.com 
+andrewrd, andrewrd.com
 Noam Eppel, CleanForest.co
